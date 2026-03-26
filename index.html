@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lundy Creative Studio Designer</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/collections.css" />
+  <link rel="stylesheet" href="css/sections.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&family=Sacramento&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     TOPBAR — Logo left, search center, buttons right
+══════════════════════════════════════════════════════════ -->
+<header class="app-topbar" id="app-topbar">
+  <div class="topbar-logo">
+    <span class="logo-script">Lundy Creative</span>
+    <span class="logo-sub">STUDIO DESIGNER</span>
+  </div>
+  <div class="topbar-center">
+    <div class="topbar-search-wrap">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" id="global-search-input" class="topbar-search" placeholder="Search collections..." />
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="btn-topbar-secondary" id="import-files-btn">
+      <i class="fas fa-file-import"></i> Import Files
+    </button>
+    <button class="btn-topbar-primary" id="new-collection-btn">
+      <i class="fas fa-plus"></i> New Collection
+    </button>
+    <button class="btn-icon-top" id="theme-btn" title="Theme">
+      <i class="fas fa-palette"></i>
+    </button>
+    <button class="btn-icon-top" id="edit-mode-btn" title="Edit Mode">
+      <i class="fas fa-pencil"></i>
+    </button>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════════════
+     MAIN TABS NAVIGATION
+══════════════════════════════════════════════════════════ -->
+<nav class="main-tabs" id="main-tabs">
+  <button class="main-tab active" data-section="collections">MY COLLECTIONS</button>
+  <button class="main-tab" data-section="studio">STUDIO</button>
+  <button class="main-tab" data-section="inspiration">INSPIRATION</button>
+  <button class="main-tab" data-section="projects">CRAFT PROJECTS</button>
+  <button class="main-tab" data-section="unzip3d">3D UNZIP</button>
+  <button class="main-tab" data-section="foil">FOIL STUDIO</button>
+  <button class="main-tab" data-section="genstudio">GEN STUDIO</button>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE BODY — full page background changes per collection
+══════════════════════════════════════════════════════════ -->
+<div class="page-body" id="page-body">
+
+  <!-- Hidden global color picker (used by palette builders) -->
+<input type="color" id="global-color-picker" style="position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none" />
+
+<!-- ══ COLLECTIONS SECTION ══ -->
+  <section id="section-collections" class="app-section active">
+
+    <!-- GALLERY VIEW -->
+    <div id="view-gallery" class="section-view active">
+      <div class="gallery-header">
+        <h2 class="gallery-title">
+          All Paper Pad Collections <span class="sparkle">✨</span>
+        </h2>
+        <span class="count-badge" id="collections-count">0 collections</span>
+      </div>
+
+      <!-- Tag filter chips -->
+      <div class="tag-filter-bar" id="tag-filter-bar">
+        <button class="tag-chip active" data-filter="all">All</button>
+        <!-- Dynamic chips added by JS -->
+      </div>
+
+      <div id="collections-grid" class="collections-grid"></div>
+      <div id="collections-empty" class="empty-state" style="display:none">
+        <i class="fas fa-layer-group empty-icon"></i>
+        <h3>No Collections Yet</h3>
+        <p>Create your first paper pad collection to get started.</p>
+        <button class="btn-primary" id="new-collection-empty-btn">
+          <i class="fas fa-plus"></i> Create Your First Collection
+        </button>
+      </div>
+    </div>
+
+    <!-- COLLECTION DETAIL VIEW -->
+    <div id="view-detail" class="section-view" style="display:none">
+      <div class="detail-page" id="detail-page">
+
+        <!-- LEFT: Collection sidebar list -->
+        <aside class="coll-sidebar" id="coll-sidebar">
+          <div class="coll-sidebar-header">
+            <span class="coll-sidebar-label">MY COLLECTIONS</span>
+            <button class="btn-text-sm" id="back-to-gallery-btn">← Back</button>
+          </div>
+          <ul id="coll-sidebar-list" class="coll-sidebar-list"></ul>
+          <div class="coll-sidebar-footer">
+            <button class="btn-add-collection" id="sidebar-add-btn">
+              <i class="fas fa-plus"></i> ADD COLLECTION
+            </button>
+            <button class="btn-favorites">
+              <i class="fas fa-heart"></i> FAVORITES
+            </button>
+          </div>
+          <!-- Tag filter in sidebar -->
+          <div class="sidebar-tag-section">
+            <div class="sidebar-section-label">FILTER BY THEME</div>
+            <div id="sidebar-tags" class="sidebar-tags"></div>
+          </div>
+        </aside>
+
+        <!-- CENTER: Main Collection Detail -->
+        <main class="coll-detail-main" id="coll-detail-main">
+          <!-- Collection name + meta -->
+          <div class="coll-detail-header" id="coll-detail-header">
+            <div class="coll-header-left">
+              <button class="back-btn-mobile" id="back-btn-mobile">← Back</button>
+              <div class="coll-title-row">
+                <h1 class="coll-title" id="coll-title">Collection Name</h1>
+                <button class="btn-heart" id="coll-heart-btn" title="Favorite">
+                  <i class="far fa-heart"></i>
+                </button>
+                <button class="btn-notes-pill" id="coll-notes-btn">
+                  <i class="fas fa-sticky-note"></i> NOTES
+                </button>
+              </div>
+              <div class="coll-meta-row" id="coll-meta-row">
+                <!-- e.g. "12x12 · PREMIUM PAPER · STICKERS · EPOXY · FOILS · CUT FILES" -->
+              </div>
+              <!-- Big color palette dots -->
+              <div class="coll-palette-row" id="coll-palette-row"></div>
+              <!-- Background/Pattern Customization Bar -->
+              <div class="bg-custom-bar" id="bg-custom-bar">
+                <button class="bg-custom-btn" id="detail-change-cover-btn" title="Upload cover / card image">
+                  <i class="fas fa-image"></i> Card Cover
+                </button>
+                <button class="bg-custom-btn" id="detail-change-pattern-btn" title="Upload page background pattern">
+                  <i class="fas fa-th"></i> Page Pattern
+                </button>
+                <button class="bg-custom-btn" id="detail-clear-bg-btn" title="Reset background">
+                  <i class="fas fa-times-circle"></i> Clear BG
+                </button>
+                <div class="bg-slider-wrap" id="bg-slider-wrap" style="display:none">
+                  <label class="bg-slider-label">Scale
+                    <input type="range" id="detail-pattern-scale" min="20" max="300" value="100" class="bg-slider" />
+                    <span id="detail-scale-val">100%</span>
+                  </label>
+                  <label class="bg-slider-label">Opacity
+                    <input type="range" id="detail-pattern-opacity" min="5" max="80" value="18" class="bg-slider" />
+                    <span id="detail-opacity-val">18%</span>
+                  </label>
+                </div>
+              </div>
+              <!-- Hidden file inputs for inline upload -->
+              <input type="file" id="detail-cover-img-input" accept="image/*" style="display:none" />
+              <input type="file" id="detail-pattern-img-input" accept="image/*" style="display:none" />
+            </div>
+            <div class="coll-header-right">
+              <span class="status-tag" id="coll-status-tag">In Progress</span>
+              <button class="btn-edit-coll" id="edit-coll-btn">
+                <i class="fas fa-pencil"></i> Edit
+              </button>
+              <button class="btn-download-all" id="download-all-btn">
+                <i class="fas fa-download"></i> Download All (ZIP)
+              </button>
+            </div>
+          </div>
+
+          <!-- Component boxes grid -->
+          <div class="components-section">
+            <div class="components-section-header">
+              <span class="components-section-label" id="components-count-label">29 ITEMS</span>
+              <button class="btn-add-assets" id="add-assets-btn">
+                <i class="fas fa-plus"></i> ADD NEW ASSETS
+              </button>
+            </div>
+            <div id="components-grid" class="components-grid"></div>
+          </div>
+
+          <!-- File Center row (below components) -->
+          <div class="file-center-panel" id="file-center-panel">
+            <div class="file-center-header">
+              <span class="file-center-label">📁 FILE CENTER</span>
+              <button class="btn-secondary btn-sm" id="upload-files-btn">
+                <i class="fas fa-upload"></i> Upload Files <i class="fas fa-caret-down" style="margin-left:4px"></i>
+              </button>
+            </div>
+            <div class="file-type-buttons" id="file-type-buttons">
+              <!-- Rendered by JS -->
+            </div>
+            <button class="btn-download-zip" id="download-zip-btn">
+              <i class="fas fa-download"></i> Download All (ZIP)
+            </button>
+            <!-- Extra files row -->
+            <div class="extra-files-row" id="extra-files-row">
+              <span class="extra-label">EXTRA FILES (SVG + PMD)</span>
+              <div class="extra-file-chips" id="extra-file-chips"></div>
+            </div>
+            <!-- Organize by tabs -->
+            <div class="organize-tabs" id="organize-tabs">
+              <span class="organize-label">ORGANIZE BY:</span>
+              <button class="organize-tab active" data-org="colors">Colors</button>
+              <button class="organize-tab" data-org="theme">Theme</button>
+              <button class="organize-tab" data-org="date">Date</button>
+            </div>
+            <!-- Notes textarea -->
+            <textarea id="coll-notes-area" class="coll-notes-area" placeholder="Add color notes here..."></textarea>
+          </div>
+        </main>
+
+        <!-- RIGHT: File / Preview Panel -->
+        <aside class="coll-right-panel" id="coll-right-panel">
+          <div class="right-panel-header">
+            <span class="right-panel-title" id="right-panel-title">COLLECTION PREVIEW</span>
+          </div>
+          <!-- Collection cover / gradient preview -->
+          <div class="collection-preview-box" id="collection-preview-box">
+            <div class="preview-img-wrap" id="preview-img-wrap">
+              <!-- collection image/gradient here -->
+            </div>
+            <!-- Cover image controls -->
+            <div class="cover-control-row">
+              <button class="btn-change-preview" id="change-preview-btn">
+                <i class="fas fa-image"></i> Change Cover
+              </button>
+              <button class="btn-change-preview btn-secondary-sm" id="remove-cover-btn" style="display:none">
+                <i class="fas fa-times"></i> Remove
+              </button>
+            </div>
+            <input type="file" id="cover-img-input" accept="image/*" style="display:none" />
+          </div>
+          <!-- Pattern image controls -->
+          <div class="right-pattern-section">
+            <div class="right-section-label"><i class="fas fa-th"></i> PAGE PATTERN</div>
+            <div class="pattern-preview-box" id="right-pattern-preview">
+              <div class="pattern-placeholder" id="pattern-placeholder">
+                <i class="fas fa-th"></i><span>No pattern set</span>
+              </div>
+              <img id="right-pattern-img" src="" alt="" style="display:none" />
+            </div>
+            <div class="pattern-btn-row">
+              <button class="btn-pattern-upload" id="right-upload-pattern-btn">
+                <i class="fas fa-upload"></i> Upload Pattern
+              </button>
+              <button class="btn-pattern-remove" id="right-remove-pattern-btn" style="display:none">
+                <i class="fas fa-times"></i> Remove
+              </button>
+            </div>
+            <input type="file" id="right-pattern-input" accept="image/*" style="display:none" />
+            <!-- Pattern controls (show when pattern is set) -->
+            <div class="pattern-controls" id="pattern-controls" style="display:none">
+              <label class="pc-label">Scale
+                <input type="range" id="right-pattern-scale" min="20" max="300" value="100" class="pc-slider" />
+                <span id="right-scale-val">100%</span>
+              </label>
+              <label class="pc-label">Opacity
+                <input type="range" id="right-pattern-opacity" min="5" max="80" value="18" class="pc-slider" />
+                <span id="right-opacity-val">18%</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- FILE CENTER file type folders in right panel -->
+          <div class="right-file-types" id="right-file-types">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Quick notes -->
+          <div class="quick-notes-box">
+            <div class="quick-notes-label">QUICK NOTES</div>
+            <textarea class="quick-notes-area" id="quick-notes-area" placeholder="Add notes..."></textarea>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- FILE VIEWER VIEW (when you click VIEW ALL on a component) -->
+    <div id="view-fileviewer" class="section-view" style="display:none">
+      <div class="fileviewer-page">
+        <!-- Topbar for this view -->
+        <div class="fileviewer-header">
+          <button class="btn-back-pill" id="fileviewer-back-btn">← Back</button>
+          <h2 class="fileviewer-title" id="fileviewer-title">Wild Romance — STICKERS</h2>
+          <div class="fileviewer-actions">
+            <label class="select-all-wrap">
+              <input type="checkbox" id="select-all-cb" /> Select All
+            </label>
+            <button class="btn-topbar-primary" id="fileviewer-download-btn">
+              <i class="fas fa-download"></i> Download Selected
+            </button>
+          </div>
+        </div>
+        <!-- File grid -->
+        <div id="fileviewer-grid" class="fileviewer-grid"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══ INSPIRATION SECTION ══ -->
+  <section id="section-inspiration" class="app-section" style="display:none">
+    <div class="inspiration-layout">
+      <div class="whiteboard-container" id="whiteboard-container">
+        <div class="whiteboard-toolbar">
+          <span class="whiteboard-label">Inspiration Whiteboard</span>
+          <div class="whiteboard-tools">
+            <button class="btn-secondary btn-sm" id="add-image-btn"><i class="fas fa-plus"></i> Add Image</button>
+            <button class="btn-secondary btn-sm" id="add-note-btn"><i class="fas fa-sticky-note"></i> Add Note</button>
+            <button class="btn-secondary btn-sm" id="wb-clear-btn"><i class="fas fa-trash-alt"></i> Clear</button>
+            <span class="whiteboard-tip">Drag & drop images here from your browser</span>
+          </div>
+        </div>
+        <div class="whiteboard-canvas" id="whiteboard-canvas">
+          <div class="whiteboard-drop-hint" id="whiteboard-drop-hint">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Drag & drop images here</p>
+            <p class="hint-sub">or click "Add Image" to browse</p>
+          </div>
+        </div>
+        <input type="file" id="wb-file-input" accept="image/*" multiple style="display:none" />
+      </div>
+      <aside class="inspiration-sidebar">
+        <div class="inspo-sidebar-header">
+          <h3>Folders</h3>
+          <button class="btn-primary btn-sm" id="new-inspo-folder-btn"><i class="fas fa-plus"></i> New Folder</button>
+        </div>
+        <div id="inspo-folders-list" class="inspo-folders-list"></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ══ CRAFT PROJECTS SECTION ══ -->
+  <section id="section-projects" class="app-section" style="display:none">
+    <div id="projects-gallery-view">
+      <div class="view-toolbar">
+        <div class="toolbar-left">
+          <h2 class="view-heading">My Craft Projects</h2>
+          <span class="count-badge" id="projects-count">0 Projects</span>
+        </div>
+        <div class="toolbar-right">
+          <input type="text" class="search-input" id="projects-search" placeholder="Search projects..." />
+          <button class="btn-primary" id="new-project-btn"><i class="fas fa-plus"></i> New Project</button>
+        </div>
+      </div>
+      <div class="status-filter-bar">
+        <button class="status-filter active" data-status="all">All</button>
+        <button class="status-filter" data-status="beginning">Beginning</button>
+        <button class="status-filter" data-status="in-progress">In Progress</button>
+        <button class="status-filter" data-status="finishing">Finishing</button>
+        <button class="status-filter" data-status="completed">Completed</button>
+        <button class="status-filter" data-status="paused">Paused</button>
+      </div>
+      <div id="projects-grid" class="projects-grid"></div>
+      <div id="projects-empty" class="empty-state" style="display:none">
+        <i class="fas fa-folder-open empty-icon"></i>
+        <h3>No Projects Yet</h3>
+        <button class="btn-primary" id="new-project-empty-btn"><i class="fas fa-plus"></i> Start a New Project</button>
+      </div>
+    </div>
+    <div id="project-detail-view" style="display:none">
+      <div class="detail-layout">
+        <aside class="detail-sidebar">
+          <div class="detail-sidebar-header">
+            <span>All Projects</span>
+            <button class="btn-icon" id="close-project-btn"><i class="fas fa-arrow-left"></i></button>
+          </div>
+          <ul id="project-sidebar-list" class="collection-sidebar-list"></ul>
+        </aside>
+        <div class="detail-main project-detail-main" id="project-detail-main"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ STUDIO SECTION ══ -->
+  <section id="section-studio" class="app-section" style="display:none">
+    <div class="studio-page">
+      <div class="studio-topbar">
+        <h2 class="studio-heading">Studio <span class="studio-dash">—</span> AI Generation Hub</h2>
+      </div>
+      <div class="studio-three-col">
+        <!-- Template Library -->
+        <div class="studio-col">
+          <div class="studio-col-label">TEMPLATE LIBRARY</div>
+          <div id="template-list" class="template-list"></div>
+        </div>
+        <!-- Create Collection -->
+        <div class="studio-col studio-col-main">
+          <div class="studio-col-label">CREATE COLLECTION</div>
+          <div id="studio-inspiration-zone" class="studio-inspo-zone">
+            <div class="studio-inspo-icon">🖼️</div>
+            <p>Drag & drop inspiration images<br>or click to upload</p>
+            <input type="file" id="studio-img-input" accept="image/*" multiple style="display:none" />
+          </div>
+          <div class="studio-prompt-label">AI GENERATION PROMPT</div>
+          <textarea id="studio-prompt" class="studio-prompt-textarea" rows="4"
+            placeholder="Generate a cohesive paper pad collection with [PATTERN_COUNT] pattern papers in a [THEME] style. Include coordinating colors, floral and botanical elements, and premium paper textures."></textarea>
+          <button class="btn-generate" id="generate-btn">
+            <i class="fas fa-wand-magic-sparkles"></i> Generate Collection
+          </button>
+          <div id="generation-result" class="generation-result"></div>
+        </div>
+        <!-- Mockup Gallery -->
+        <div class="studio-col">
+          <div class="studio-col-label">MOCKUP GALLERY</div>
+          <div id="studio-mockup-grid" class="studio-mockup-grid"></div>
+          <button class="btn-ai-placement" id="ai-placement-btn">
+            <i class="fas fa-magic"></i> AI Auto-Placement
+          </button>
+          <div class="export-label">EXPORT</div>
+          <div class="export-btns">
+            <button class="export-btn">PDF</button>
+            <button class="export-btn">JPG</button>
+            <button class="export-btn">PNG</button>
+            <button class="export-btn">SVG</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 3D UNZIP SECTION ══ -->
+  <section id="section-unzip3d" class="app-section" style="display:none">
+    <div class="unzip-layout">
+      <div class="unzip-header">
+        <h2 class="view-heading">3D Unzip — Pattern Generator</h2>
+        <p class="unzip-subtitle">Transform photos of 3D objects into printable 2D templates and die line patterns</p>
+      </div>
+      <div class="unzip-workspace">
+        <div class="unzip-upload-panel">
+          <h3>Step 1: Upload 3D Object Photo</h3>
+          <div class="unzip-drop-zone" id="unzip-drop-zone">
+            <i class="fas fa-box-open unzip-icon"></i>
+            <p>Drag & drop a photo of your 3D object</p>
+            <p class="hint-sub">Purse, bag, box, folder — any 3D item</p>
+            <button class="btn-secondary" id="unzip-upload-btn"><i class="fas fa-upload"></i> Browse Photo</button>
+            <input type="file" id="unzip-file-input" accept="image/*" style="display:none" />
+          </div>
+          <div id="unzip-preview" class="unzip-preview" style="display:none">
+            <img id="unzip-preview-img" src="" alt="3D Object" />
+            <button class="btn-secondary btn-sm" id="unzip-change-btn">Change Photo</button>
+          </div>
+          <div class="unzip-object-info" id="unzip-object-info" style="display:none">
+            <h4>Object Details</h4>
+            <label>Object Type<input type="text" id="unzip-type" class="input-field" placeholder="e.g. Handbag, Gift Box" /></label>
+            <label>Dimensions<input type="text" id="unzip-dims" class="input-field" placeholder="e.g. 12x8x4 inches" /></label>
+            <label>Notes<textarea id="unzip-notes" class="input-field" rows="2" placeholder="Special features..."></textarea></label>
+            <button class="btn-primary btn-full" id="unzip-generate-btn"><i class="fas fa-magic"></i> Generate Templates</button>
+          </div>
+        </div>
+        <div class="unzip-output-panel" id="unzip-output-panel">
+          <h3>Generated Output Package</h3>
+          <div id="unzip-output-placeholder" class="unzip-output-placeholder">
+            <i class="fas fa-box-open" style="font-size:2.5rem;color:var(--blush-200)"></i>
+            <p>Upload a photo and generate templates to see results here</p>
+          </div>
+          <div id="unzip-results" class="unzip-results" style="display:none">
+            <div class="unzip-tabs">
+              <button class="unzip-tab active" data-tab="illustration">Fashion Illustration</button>
+              <button class="unzip-tab" data-tab="dieline">2D Die Line</button>
+              <button class="unzip-tab" data-tab="svg">SVG Template</button>
+              <button class="unzip-tab" data-tab="materials">Materials List</button>
+              <button class="unzip-tab" data-tab="instructions">Assembly</button>
+            </div>
+            <div id="unzip-tab-content" class="unzip-tab-content"></div>
+            <div class="unzip-download-bar">
+              <button class="btn-primary"><i class="fas fa-download"></i> Download Package (ZIP)</button>
+              <button class="btn-secondary"><i class="fas fa-save"></i> Save to Projects</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="unzip-saved-section">
+        <h3>Saved Unzip Projects</h3>
+        <div id="unzip-saved-grid" class="unzip-saved-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOIL STUDIO SECTION ══ -->
+  <section id="section-foil" class="app-section" style="display:none">
+    <div class="foil-layout">
+      <div class="foil-header">
+        <h2 class="view-heading">Foil Studio</h2>
+        <p class="foil-subtitle">Add beautiful foil effects to your patterns with precision alignment</p>
+      </div>
+      <div class="foil-workspace">
+        <div class="foil-left-panel">
+          <h3>Step 1: Select a Pattern</h3>
+          <div class="foil-pattern-selector" id="foil-pattern-selector">
+            <div class="foil-drop-zone" id="foil-drop-zone">
+              <i class="fas fa-star foil-icon"></i>
+              <p>Select from Collections or Upload</p>
+              <div class="foil-btn-group">
+                <button class="btn-secondary btn-sm" id="foil-from-collection-btn"><i class="fas fa-layer-group"></i> From Collections</button>
+                <button class="btn-secondary btn-sm" id="foil-upload-btn"><i class="fas fa-upload"></i> Upload Pattern</button>
+              </div>
+              <input type="file" id="foil-file-input" accept="image/*" style="display:none" />
+            </div>
+            <div id="foil-pattern-preview" class="foil-pattern-preview" style="display:none">
+              <img id="foil-pattern-img" src="" alt="Pattern" />
+              <button class="btn-sm btn-secondary" id="foil-change-pattern-btn">Change</button>
+            </div>
+          </div>
+          <div id="foil-drawing-section" class="foil-drawing-section" style="display:none">
+            <h3>Step 2: Mark Foil Areas</h3>
+            <div class="foil-tool-bar">
+              <button class="foil-tool active" data-tool="draw"><i class="fas fa-pen"></i> Draw</button>
+              <button class="foil-tool" data-tool="erase"><i class="fas fa-eraser"></i> Erase</button>
+              <button class="foil-tool" data-tool="highlight"><i class="fas fa-highlighter"></i> Highlight</button>
+              <label class="foil-size-label">Size: <input type="range" id="foil-brush-size" min="2" max="30" value="10" class="brush-slider" /></label>
+              <button class="btn-secondary btn-sm" id="foil-clear-mask-btn"><i class="fas fa-trash-alt"></i> Clear</button>
+            </div>
+            <canvas id="foil-canvas" class="foil-canvas"></canvas>
+          </div>
+        </div>
+        <div class="foil-right-panel">
+          <h3>Foil Workflow</h3>
+          <div class="foil-workflow-select">
+            <div class="workflow-card active" data-workflow="digital" id="workflow-digital">
+              <i class="fas fa-digital-tachograph"></i><h4>Workflow A</h4><p>Digital Foil Planning</p><span class="workflow-badge">Laser Printer</span>
+            </div>
+            <div class="workflow-card" data-workflow="stencil" id="workflow-stencil">
+              <i class="fas fa-cut"></i><h4>Workflow B</h4><p>Stencil Creation</p><span class="workflow-badge">Any Printer</span>
+            </div>
+          </div>
+          <div class="foil-alignment-section" id="foil-alignment-section">
+            <h4><i class="fas fa-crosshairs"></i> Alignment System</h4>
+            <p class="alignment-description">Uses guide marks to ensure perfect registration between your base pattern and foil layer.</p>
+            <div class="alignment-steps">
+              <div class="align-step"><div class="align-step-num">1</div><div>Print pattern with alignment guides</div></div>
+              <div class="align-step"><div class="align-step-num">2</div><div>Place in alignment station</div></div>
+              <div class="align-step"><div class="align-step-num">3</div><div>Run foil — perfect registration</div></div>
+            </div>
+            <div class="foil-output-actions" id="foil-output-actions" style="display:none">
+              <button class="btn-primary"><i class="fas fa-layer-group"></i> Generate Foil Mask</button>
+              <button class="btn-secondary"><i class="fas fa-cut"></i> Create SVG Stencil</button>
+              <button class="btn-secondary"><i class="fas fa-print"></i> Print with Guides</button>
+            </div>
+          </div>
+          <div class="foil-saved-section">
+            <h4>Saved Foil Projects</h4>
+            <div id="foil-saved-list" class="foil-saved-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ GEN STUDIO SECTION ══ -->
+  <section id="section-genstudio" class="app-section" style="display:none">
+    <div class="gen-layout">
+
+      <!-- LEFT SPINE NAV -->
+      <nav class="gen-spine-nav" id="gen-spine-nav">
+        <div class="gen-spine-logo">
+          <span class="gen-spine-title">GEN</span>
+          <span class="gen-spine-sub">STUDIO</span>
+        </div>
+        <button class="gen-spine-btn active" data-gen-page="dashboard">
+          <i class="fas fa-home"></i><span>Dashboard</span>
+        </button>
+        <button class="gen-spine-btn" data-gen-page="ai-programs">
+          <i class="fas fa-robot"></i><span>AI Programs</span>
+        </button>
+        <button class="gen-spine-btn" data-gen-page="visual-library">
+          <i class="fas fa-images"></i><span>Visual Library</span>
+        </button>
+        <button class="gen-spine-btn" data-gen-page="skill-binders">
+          <i class="fas fa-book-open"></i><span>Skill Binders</span>
+        </button>
+        <button class="gen-spine-btn" data-gen-page="notebooks">
+          <i class="fas fa-book"></i><span>Notebooks</span>
+        </button>
+        <button class="gen-spine-btn" data-gen-page="worksheet">
+          <i class="fas fa-file-alt"></i><span>Worksheets</span>
+        </button>
+        <button class="gen-spine-btn" data-gen-page="prompt-helper">
+          <i class="fas fa-magic"></i><span>Prompt Helper</span>
+        </button>
+        <button class="gen-spine-btn" data-gen-page="brand-kit">
+          <i class="fas fa-paint-brush"></i><span>Brand Kit</span>
+        </button>
+      </nav>
+
+      <!-- MAIN CONTENT AREA -->
+      <div class="gen-main" id="gen-main">
+
+        <!-- ── PAGE: DASHBOARD ── -->
+        <div class="gen-page active" id="gen-page-dashboard">
+          <div class="gen-page-header">
+            <div>
+              <h2 class="gen-page-title">Studio Dashboard</h2>
+              <p class="gen-page-sub" id="gen-today-date">Welcome back — your creative space is ready.</p>
+            </div>
+          </div>
+          <!-- Live stats strip -->
+          <div class="gen-stats-strip" id="gen-stats-strip">
+            <div class="gen-stat-card" data-gen-page="visual-library">
+              <div class="gen-stat-num" id="stat-library">0</div>
+              <div class="gen-stat-label">Library Items</div>
+              <i class="fas fa-images gen-stat-icon"></i>
+            </div>
+            <div class="gen-stat-card" data-gen-page="ai-programs">
+              <div class="gen-stat-num" id="stat-ai">0</div>
+              <div class="gen-stat-label">AI Programs</div>
+              <i class="fas fa-robot gen-stat-icon"></i>
+            </div>
+            <div class="gen-stat-card" data-gen-page="prompt-helper">
+              <div class="gen-stat-num" id="stat-prompts">0</div>
+              <div class="gen-stat-label">Saved Prompts</div>
+              <i class="fas fa-magic gen-stat-icon"></i>
+            </div>
+            <div class="gen-stat-card" data-gen-page="skill-binders">
+              <div class="gen-stat-num" id="stat-binders">0</div>
+              <div class="gen-stat-label">Skill Binders</div>
+              <i class="fas fa-book-open gen-stat-icon"></i>
+            </div>
+            <div class="gen-stat-card" data-gen-page="notebooks">
+              <div class="gen-stat-num" id="stat-notebooks">0</div>
+              <div class="gen-stat-label">Notebooks</div>
+              <i class="fas fa-book gen-stat-icon"></i>
+            </div>
+            <div class="gen-stat-card" data-gen-page="worksheet">
+              <div class="gen-stat-num" id="stat-worksheets">0</div>
+              <div class="gen-stat-label">Worksheets</div>
+              <i class="fas fa-file-alt gen-stat-icon"></i>
+            </div>
+          </div>
+          <!-- Quick action buttons -->
+          <div class="gen-section-label">QUICK ACTIONS</div>
+          <div class="gen-quick-actions">
+            <button class="gen-qa-btn" data-gen-page="ai-programs"><i class="fas fa-robot"></i> AI Programs</button>
+            <button class="gen-qa-btn" data-gen-page="visual-library"><i class="fas fa-images"></i> Visual Library</button>
+            <button class="gen-qa-btn" data-gen-page="skill-binders"><i class="fas fa-book-open"></i> Skill Binders</button>
+            <button class="gen-qa-btn" data-gen-page="notebooks"><i class="fas fa-book"></i> Notebooks</button>
+            <button class="gen-qa-btn" data-gen-page="worksheet"><i class="fas fa-file-alt"></i> Worksheets</button>
+            <button class="gen-qa-btn gen-qa-primary" data-gen-page="prompt-helper"><i class="fas fa-magic"></i> Prompt Helper</button>
+          </div>
+          <!-- Recently added -->
+          <div class="gen-section-label" style="margin-top:24px">RECENTLY ADDED</div>
+          <div id="gen-recent-grid" class="gen-recent-grid"></div>
+        </div>
+
+        <!-- ── PAGE: AI PROGRAMS ── -->
+        <div class="gen-page" id="gen-page-ai-programs">
+          <div class="gen-page-header">
+            <div>
+              <h2 class="gen-page-title">AI Program Dashboards</h2>
+              <p class="gen-page-sub">Track your tools, prompts, and outputs per AI program.</p>
+            </div>
+            <button class="gen-action-btn" id="add-ai-btn"><i class="fas fa-plus"></i> Add Program</button>
+          </div>
+          <div id="gen-ai-grid" class="gen-ai-grid"></div>
+        </div>
+
+        <!-- ── PAGE: VISUAL LIBRARY ── -->
+        <div class="gen-page" id="gen-page-visual-library">
+          <div class="gen-page-header">
+            <div>
+              <h2 class="gen-page-title">Visual Library</h2>
+              <p class="gen-page-sub">All your images, worksheets, prompts, and design files in one place.</p>
+            </div>
+            <button class="gen-action-btn" id="add-lib-item-btn"><i class="fas fa-plus"></i> Add Item</button>
+          </div>
+          <!-- Filter + search bar -->
+          <div class="gen-lib-toolbar">
+            <div class="gen-lib-filters" id="gen-lib-filters">
+              <button class="gen-filter-chip active" data-lib-filter="all">All</button>
+              <button class="gen-filter-chip" data-lib-filter="image">Images</button>
+              <button class="gen-filter-chip" data-lib-filter="worksheet">Worksheets</button>
+              <button class="gen-filter-chip" data-lib-filter="prompt">Prompts</button>
+              <button class="gen-filter-chip" data-lib-filter="foil">Foil Layers</button>
+              <button class="gen-filter-chip" data-lib-filter="pattern">Patterns</button>
+              <button class="gen-filter-chip" data-lib-filter="template">Templates</button>
+            </div>
+            <div class="gen-lib-search-wrap">
+              <i class="fas fa-search"></i>
+              <input type="text" id="gen-lib-search" class="gen-lib-search" placeholder="Search library..." />
+            </div>
+          </div>
+          <div id="gen-lib-grid" class="gen-lib-grid"></div>
+        </div>
+
+        <!-- ── PAGE: SKILL BINDERS ── -->
+        <div class="gen-page" id="gen-page-skill-binders">
+          <div class="gen-page-header">
+            <div>
+              <h2 class="gen-page-title">Skill Binders</h2>
+              <p class="gen-page-sub">Custom binders with tabbed dividers and page management.</p>
+            </div>
+            <button class="gen-action-btn" id="add-binder-btn"><i class="fas fa-plus"></i> New Binder</button>
+          </div>
+          <div class="gen-binder-layout">
+            <!-- Spine shelf (binder list) -->
+            <div class="gen-binder-shelf" id="gen-binder-shelf"></div>
+            <!-- Binder detail view -->
+            <div class="gen-binder-detail" id="gen-binder-detail">
+              <div class="gen-binder-empty">
+                <i class="fas fa-book-open"></i>
+                <p>Select a binder from the shelf</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── PAGE: NOTEBOOKS ── -->
+        <div class="gen-page" id="gen-page-notebooks">
+          <div class="gen-page-header">
+            <div>
+              <h2 class="gen-page-title">Notebooks &amp; Folders</h2>
+              <p class="gen-page-sub">Folders, spiral notebooks, sketchbooks, and 12×12 scrapbook pads.</p>
+            </div>
+            <button class="gen-action-btn" id="add-notebook-btn"><i class="fas fa-plus"></i> Add Container</button>
+          </div>
+          <div class="gen-nb-filter-bar">
+            <button class="gen-filter-chip active" data-nb-filter="all">All</button>
+            <button class="gen-filter-chip" data-nb-filter="folder">Folders</button>
+            <button class="gen-filter-chip" data-nb-filter="spiral">Spiral Notebooks</button>
+            <button class="gen-filter-chip" data-nb-filter="sketchbook">Sketchbooks</button>
+            <button class="gen-filter-chip" data-nb-filter="scrapbook">12×12 Pads</button>
+          </div>
+          <div id="gen-nb-grid" class="gen-nb-grid"></div>
+        </div>
+
+        <!-- ── PAGE: WORKSHEET GENERATOR ── -->
+        <div class="gen-page" id="gen-page-worksheet">
+          <div class="gen-page-header">
+            <div>
+              <h2 class="gen-page-title">Worksheet Generator</h2>
+              <p class="gen-page-sub">Create branded, printable worksheets. Live preview as you type.</p>
+            </div>
+            <button class="gen-action-btn" id="ws-save-lib-btn"><i class="fas fa-save"></i> Save to Library</button>
+          </div>
+          <div class="gen-ws-layout">
+            <!-- Controls column -->
+            <div class="gen-ws-controls">
+              <label class="gen-form-label">Page Size
+                <select id="ws-size" class="gen-input">
+                  <option value="8.5x11">8.5 × 11" (Letter)</option>
+                  <option value="5x7">5 × 7"</option>
+                  <option value="7x8">7 × 8"</option>
+                  <option value="12x12">12 × 12"</option>
+                </select>
+              </label>
+              <label class="gen-form-label">Worksheet Title
+                <input type="text" id="ws-title" class="gen-input" placeholder="e.g. Foiling Technique Guide" />
+              </label>
+              <label class="gen-form-label">AI Source
+                <select id="ws-source" class="gen-input">
+                  <optgroup label="Ask Anything">
+                    <option>Ask Gemini</option><option>Ask Copilot</option><option>Chat</option>
+                  </optgroup>
+                  <optgroup label="Chat AI">
+                    <option>DeepAI Chat</option><option>DeepSeek</option><option>ChatGPT</option><option>Gemini</option>
+                  </optgroup>
+                  <optgroup label="Microsoft">
+                    <option>M365 Copilot</option><option>Microsoft Copilot</option>
+                  </optgroup>
+                  <optgroup label="Creative AI">
+                    <option>Midjourney</option><option>Adobe Firefly</option><option>Canva AI</option>
+                  </optgroup>
+                  <optgroup label="Research &amp; Planning">
+                    <option>NotebookLM</option><option>Genspark</option><option>Skywork</option>
+                  </optgroup>
+                  <optgroup label="Organization">
+                    <option>Notion AI</option><option>Milanote</option>
+                  </optgroup>
+                  <optgroup label="Other">
+                    <option>Wispr Flow</option><option>Manus</option><option>Firebase Studio</option><option>Manual</option>
+                  </optgroup>
+                </select>
+              </label>
+              <label class="gen-form-label">Tags
+                <input type="text" id="ws-tags" class="gen-input" placeholder="foiling, technique, tutorial" />
+              </label>
+              <label class="gen-form-label">File Types
+                <input type="text" id="ws-filetypes" class="gen-input" placeholder="PNG, SVG, PDF" />
+              </label>
+              <div class="gen-form-label">Color Theme
+                <div class="ws-color-row" id="ws-color-row">
+                  <div class="ws-color-swatch active" data-color="#CFA18D" style="background:#CFA18D" title="Rose Gold"></div>
+                  <div class="ws-color-swatch" data-color="#E8647A" style="background:#E8647A" title="Studio Rose"></div>
+                  <div class="ws-color-swatch" data-color="#7B5EA7" style="background:#7B5EA7" title="Violet"></div>
+                  <div class="ws-color-swatch" data-color="#2EB8B8" style="background:#2EB8B8" title="Teal"></div>
+                  <div class="ws-color-swatch" data-color="#D4A851" style="background:#D4A851" title="Gold"></div>
+                  <div class="ws-color-swatch" data-color="#4BA67C" style="background:#4BA67C" title="Forest"></div>
+                  <div class="ws-color-swatch" data-color="#3D2F2A" style="background:#3D2F2A" title="Charcoal"></div>
+                </div>
+              </div>
+              <label class="gen-form-label">Content
+                <textarea id="ws-content" class="gen-input gen-textarea" placeholder="Paste your notes, steps, or tips here..."></textarea>
+              </label>
+              <div class="ws-action-row">
+                <button class="gen-action-btn" onclick="GenStudioMgr.printWorksheet()"><i class="fas fa-print"></i> Print / PDF</button>
+              </div>
+            </div>
+            <!-- Live preview column -->
+            <div class="gen-ws-preview-wrap">
+              <div class="gen-ws-preview-label">LIVE PREVIEW</div>
+              <div class="gen-ws-preview" id="ws-preview">
+                <div class="ws-preview-header" id="ws-preview-header">
+                  <div class="ws-preview-logo">Lundy Creative Studio</div>
+                  <div class="ws-preview-title" id="ws-preview-title">Worksheet Title</div>
+                  <div class="ws-preview-meta" id="ws-preview-meta">Source · Tags</div>
+                </div>
+                <div class="ws-preview-body" id="ws-preview-body">
+                  <p style="color:#aaa;font-style:italic">Your content will appear here...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── PAGE: PROMPT HELPER ── -->
+        <div class="gen-page" id="gen-page-prompt-helper">
+          <div class="gen-page-header">
+            <div>
+              <h2 class="gen-page-title">Prompt Helper</h2>
+              <p class="gen-page-sub">Brain-dump your idea → get 5 polished prompt variants instantly.</p>
+            </div>
+            <div class="gen-ph-toggles">
+              <button class="gen-sam-toggle" id="gen-sam-btn" title="SAM Mode keeps prompts bold, visual, and aesthetically aligned">
+                <i class="fas fa-star"></i> SAM Mode
+              </button>
+            </div>
+          </div>
+          <div class="gen-ph-layout">
+            <!-- Input panel -->
+            <div class="gen-ph-input-panel">
+              <label class="gen-form-label">Your Idea (brain dump it)
+                <textarea id="ph-input" class="gen-input gen-textarea gen-textarea-lg" placeholder="Describe what you're trying to create, the vibe, the style, the colors... don't hold back!"></textarea>
+              </label>
+              <div class="gen-ph-row">
+                <label class="gen-form-label" style="flex:1">AI Target
+                  <select id="ph-target" class="gen-input">
+                    <option value="general">General</option>
+                    <option value="image">Image Generation</option>
+                    <option value="writing">Writing</option>
+                    <option value="coding">Coding</option>
+                    <option value="design">Design</option>
+                  </select>
+                </label>
+                <button class="gen-action-btn gen-action-lg" id="gen-prompt-btn"><i class="fas fa-magic"></i> Generate Prompts</button>
+              </div>
+              <!-- Output variants -->
+              <div id="ph-variants" class="ph-variants" style="display:none">
+                <div class="ph-variant-tabs">
+                  <button class="ph-vtab active" data-vtab="short">Short</button>
+                  <button class="ph-vtab" data-vtab="medium">Medium</button>
+                  <button class="ph-vtab" data-vtab="detailed">Detailed</button>
+                  <button class="ph-vtab" data-vtab="creative">Creative</button>
+                  <button class="ph-vtab" data-vtab="technical">Technical</button>
+                </div>
+                <div class="ph-variant-body" id="ph-variant-body"></div>
+                <div class="ph-variant-actions">
+                  <button class="gen-filter-chip" id="ph-copy-btn"><i class="fas fa-copy"></i> Copy</button>
+                  <button class="gen-filter-chip" id="ph-save-btn"><i class="fas fa-save"></i> Save Prompt</button>
+                </div>
+              </div>
+            </div>
+            <!-- Saved prompts panel -->
+            <div class="gen-ph-saved-panel">
+              <div class="gen-ph-saved-header">
+                <span class="gen-section-label" style="margin:0">SAVED PROMPTS</span>
+                <span class="gen-count-badge" id="ph-saved-count">0</span>
+              </div>
+              <div id="ph-saved-list" class="ph-saved-list"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── PAGE: BRAND KIT ── -->
+        <div class="gen-page" id="gen-page-brand-kit">
+          <div class="gen-page-header">
+            <div>
+              <h2 class="gen-page-title">Brand Kit</h2>
+              <p class="gen-page-sub">Lundy Creative Studio color palette, typography, and logo concepts.</p>
+            </div>
+          </div>
+          <div class="gen-brand-grid">
+            <!-- Colors -->
+            <div class="gen-brand-card">
+              <div class="gen-brand-card-title"><i class="fas fa-palette"></i> Color Palette</div>
+              <div class="gen-brand-colors">
+                <div class="gen-brand-color-row"><div class="gen-brand-swatch" style="background:#CFA18D"></div><div class="gen-brand-color-info"><span>Rose Gold</span><code>#CFA18D</code></div></div>
+                <div class="gen-brand-color-row"><div class="gen-brand-swatch" style="background:#E8647A"></div><div class="gen-brand-color-info"><span>Studio Rose</span><code>#E8647A</code></div></div>
+                <div class="gen-brand-color-row"><div class="gen-brand-swatch" style="background:#7B5EA7"></div><div class="gen-brand-color-info"><span>Creative Violet</span><code>#7B5EA7</code></div></div>
+                <div class="gen-brand-color-row"><div class="gen-brand-swatch" style="background:#2EB8B8"></div><div class="gen-brand-color-info"><span>Studio Teal</span><code>#2EB8B8</code></div></div>
+                <div class="gen-brand-color-row"><div class="gen-brand-swatch" style="background:#D4A851"></div><div class="gen-brand-color-info"><span>LCS Gold</span><code>#D4A851</code></div></div>
+                <div class="gen-brand-color-row"><div class="gen-brand-swatch" style="background:#FF7055"></div><div class="gen-brand-color-info"><span>Warm Coral</span><code>#FF7055</code></div></div>
+                <div class="gen-brand-color-row"><div class="gen-brand-swatch" style="background:#4BA67C"></div><div class="gen-brand-color-info"><span>Forest Green</span><code>#4BA67C</code></div></div>
+                <div class="gen-brand-color-row"><div class="gen-brand-swatch" style="background:#3D2F2A"></div><div class="gen-brand-color-info"><span>Studio Black</span><code>#3D2F2A</code></div></div>
+                <div class="gen-brand-color-row"><div class="gen-brand-swatch" style="background:#FDF5F3"></div><div class="gen-brand-color-info"><span>Blush White</span><code>#FDF5F3</code></div></div>
+              </div>
+            </div>
+            <!-- Typography -->
+            <div class="gen-brand-card">
+              <div class="gen-brand-card-title"><i class="fas fa-font"></i> Typography</div>
+              <div class="gen-brand-type">
+                <div class="gen-type-sample">
+                  <div class="gen-type-name">Playfair Display</div>
+                  <div class="gen-type-use">Headings &amp; Titles</div>
+                  <div class="gen-type-preview" style="font-family:'Playfair Display',serif">Lundy Creative Studio Designer</div>
+                  <div class="gen-type-alpha" style="font-family:'Playfair Display',serif">AaBbCcDdEeFfGgHhIi</div>
+                </div>
+                <div class="gen-type-sample">
+                  <div class="gen-type-name">Lato</div>
+                  <div class="gen-type-use">Body &amp; UI Text</div>
+                  <div class="gen-type-preview" style="font-family:'Lato',sans-serif">Paper pad collection management system</div>
+                  <div class="gen-type-alpha" style="font-family:'Lato',sans-serif">AaBbCcDdEeFfGgHhIi</div>
+                </div>
+                <div class="gen-type-sample">
+                  <div class="gen-type-name">Sacramento</div>
+                  <div class="gen-type-use">Logo &amp; Branding Script</div>
+                  <div class="gen-type-preview" style="font-family:'Sacramento',cursive;font-size:1.6rem">Lundy Creative</div>
+                </div>
+              </div>
+            </div>
+            <!-- Logo concepts -->
+            <div class="gen-brand-card">
+              <div class="gen-brand-card-title"><i class="fas fa-star"></i> Logo Concepts</div>
+              <div class="gen-brand-logos">
+                <div class="gen-brand-logo-item" style="--logo-accent:#CFA18D">
+                  <div class="gen-logo-preview">
+                    <span class="gen-logo-script">Lundy Creative</span>
+                    <span class="gen-logo-sub">STUDIO DESIGNER</span>
+                  </div>
+                  <span class="gen-logo-label">Script + Sans</span>
+                </div>
+                <div class="gen-brand-logo-item" style="--logo-accent:#7B5EA7">
+                  <div class="gen-logo-preview" style="flex-direction:row;gap:10px;align-items:center">
+                    <div style="width:36px;height:36px;background:var(--logo-accent);border-radius:8px;display:flex;align-items:center;justify-content:center">
+                      <i class="fas fa-layer-group" style="color:#fff;font-size:1rem"></i>
+                    </div>
+                    <div>
+                      <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:0.9rem;color:#3D2F2A">LCS</div>
+                      <div style="font-size:0.55rem;letter-spacing:2px;color:#7A6055">DESIGNER</div>
+                    </div>
+                  </div>
+                  <span class="gen-logo-label">Icon + Monogram</span>
+                </div>
+                <div class="gen-brand-logo-item" style="--logo-accent:#2EB8B8">
+                  <div class="gen-logo-preview">
+                    <span style="font-family:'Lato',sans-serif;font-weight:300;font-size:0.65rem;letter-spacing:4px;color:#7A6055">LUNDY</span>
+                    <span style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#3D2F2A">Creative Studio</span>
+                  </div>
+                  <span class="gen-logo-label">Minimal Stacked</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /gen-main -->
+
+      <!-- SLIDE-OVER PANEL (AI program detail) -->
+      <div class="gen-slide-panel" id="gen-slide-panel">
+        <button class="gen-slide-close" id="gen-slide-close"><i class="fas fa-times"></i></button>
+        <div id="gen-slide-content"></div>
+      </div>
+
+    </div><!-- /gen-layout -->
+  </section>
+
+</div><!-- /page-body -->
+
+<!-- ══════════════════════════════════════════════════════════
+     MODALS
+══════════════════════════════════════════════════════════ -->
+<!-- New Collection Modal -->
+<div id="modal-new-collection" class="modal-overlay" style="display:none">
+  <div class="modal-box modal-wide">
+    <div class="modal-header"><h3><i class="fas fa-layer-group"></i> New Collection</h3><button class="modal-close-btn" onclick="closeModal('modal-new-collection')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body modal-two-col">
+      <!-- Left column: basic info -->
+      <div class="modal-col">
+        <label class="form-label">Collection Name *<input type="text" id="nc-name" class="input-field" placeholder="e.g. Resilient Blooms" /></label>
+        <label class="form-label">Size
+          <select id="nc-size" class="input-field">
+            <option value="12x12">12 x 12"</option><option value="8.5x11">8.5 x 11"</option><option value="6x6">6 x 6"</option><option value="custom">Custom</option>
+          </select>
+        </label>
+        <label class="form-label">Type
+          <select id="nc-type" class="input-field">
+            <option>Digital</option><option>Print &amp; Cut</option><option>Physical</option>
+          </select>
+        </label>
+        <label class="form-label">Status
+          <select id="nc-status" class="input-field">
+            <option>In Progress</option><option>Beginning</option><option>Ready for Final</option><option>Needs Editing</option><option>Completed</option><option>Paused</option>
+          </select>
+        </label>
+        <label class="form-label">Tags (comma-separated)<input type="text" id="nc-tags" class="input-field" placeholder="floral, summer, vintage" /></label>
+        <label class="form-label">Color Palette <span class="form-hint">(click dots to change)</span>
+          <div id="nc-palette-builder" class="palette-builder"></div>
+        </label>
+      </div>
+      <!-- Right column: images -->
+      <div class="modal-col">
+        <div class="form-label">Card Cover Image <span class="form-hint">(shown on collection cards)</span></div>
+        <div class="img-upload-box" id="nc-cover-upload-box">
+          <img id="nc-cover-preview" src="" alt="" style="display:none" class="upload-preview-img" />
+          <div class="img-upload-placeholder" id="nc-cover-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Upload cover image</span>
+          </div>
+          <label class="img-upload-label">
+            <i class="fas fa-upload"></i> Browse
+            <input type="file" id="nc-cover-img" accept="image/*" class="input-file-hidden" />
+          </label>
+        </div>
+        <div class="form-label" style="margin-top:14px">Page Background Pattern <span class="form-hint">(tiled behind collection detail)</span></div>
+        <div class="img-upload-box" id="nc-pattern-upload-box">
+          <img id="nc-pattern-preview-img" src="" alt="" style="display:none" class="upload-preview-img pattern-preview" />
+          <div class="img-upload-placeholder" id="nc-pattern-placeholder">
+            <i class="fas fa-th"></i>
+            <span>Upload pattern / texture</span>
+          </div>
+          <label class="img-upload-label">
+            <i class="fas fa-upload"></i> Browse
+            <input type="file" id="nc-pattern-img" accept="image/*" class="input-file-hidden" />
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modal-new-collection')">Cancel</button>
+      <button class="btn-primary" id="save-new-collection-btn"><i class="fas fa-save"></i> Create Collection</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Collection Modal -->
+<div id="modal-edit-collection" class="modal-overlay" style="display:none">
+  <div class="modal-box modal-wide">
+    <div class="modal-header"><h3><i class="fas fa-pencil"></i> Edit Collection</h3><button class="modal-close-btn" onclick="closeModal('modal-edit-collection')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body modal-two-col">
+      <!-- Left column -->
+      <div class="modal-col">
+        <label class="form-label">Collection Name<input type="text" id="ec-name" class="input-field" /></label>
+        <label class="form-label">Status
+          <select id="ec-status" class="input-field">
+            <option>In Progress</option><option>Beginning</option><option>Ready for Final</option><option>Needs Editing</option><option>Completed</option><option>Paused</option>
+          </select>
+        </label>
+        <label class="form-label">Tags (comma-separated)<input type="text" id="ec-tags" class="input-field" /></label>
+        <label class="form-label">Color Palette <span class="form-hint">(click dots to change)</span>
+          <div id="ec-palette-builder" class="palette-builder"></div>
+        </label>
+      </div>
+      <!-- Right column: images -->
+      <div class="modal-col">
+        <div class="form-label">Card Cover Image <span class="form-hint">(shown on collection cards)</span></div>
+        <div class="img-upload-box">
+          <img id="ec-cover-thumb" src="" alt="" style="display:none" class="upload-preview-img" />
+          <label class="img-upload-label full">
+            <i class="fas fa-upload"></i> Change Cover Image
+            <input type="file" id="ec-cover-img" accept="image/*" class="input-file-hidden" />
+          </label>
+        </div>
+        <div class="form-label" style="margin-top:14px">Page Background Pattern <span class="form-hint">(tiled behind detail page)</span></div>
+        <div class="img-upload-box">
+          <img id="ec-pattern-thumb" src="" alt="" style="display:none" class="upload-preview-img pattern-preview" />
+          <label class="img-upload-label full">
+            <i class="fas fa-upload"></i> Change Pattern Image
+            <input type="file" id="ec-pattern-img" accept="image/*" class="input-file-hidden" />
+          </label>
+        </div>
+        <!-- Pattern scale and opacity controls -->
+        <div class="pattern-edit-controls">
+          <label class="pc-label">Pattern Scale
+            <input type="range" id="ec-pattern-scale" min="20" max="300" value="100" class="pc-slider" />
+            <span id="ec-scale-val">100%</span>
+          </label>
+          <label class="pc-label">Pattern Opacity
+            <input type="range" id="ec-pattern-opacity" min="5" max="80" value="18" class="pc-slider" />
+            <span id="ec-opacity-val">18%</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-danger" id="delete-collection-btn"><i class="fas fa-trash-alt"></i> Delete</button>
+      <button class="btn-secondary" onclick="closeModal('modal-edit-collection')">Cancel</button>
+      <button class="btn-primary" id="save-edit-collection-btn"><i class="fas fa-save"></i> Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Component Modal -->
+<div id="modal-add-component" class="modal-overlay" style="display:none">
+  <div class="modal-box modal-sm">
+    <div class="modal-header"><h3>Add Section</h3><button class="modal-close-btn" onclick="closeModal('modal-add-component')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body"><div id="component-type-grid" class="component-type-grid"></div></div>
+  </div>
+</div>
+
+<!-- New Project Modal -->
+<div id="modal-new-project" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <div class="modal-header"><h3>New Craft Project</h3><button class="modal-close-btn" onclick="closeModal('modal-new-project')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <div class="project-setup-steps">
+        <div class="setup-step active" id="setup-step-1">
+          <h4>Project Basics</h4>
+          <label class="form-label">Project Name<input type="text" id="np-name" class="input-field" placeholder="Name your project" /></label>
+          <label class="form-label">Dimensions<input type="text" id="np-dims" class="input-field" placeholder="e.g. 8.5 x 11 inches" /></label>
+          <label class="form-label">Status
+            <select id="np-status" class="input-field">
+              <option>Beginning</option><option>In Progress</option><option>Finishing</option><option>Completed</option><option>Paused</option>
+            </select>
+          </label>
+        </div>
+        <div class="setup-step" id="setup-step-2" style="display:none">
+          <h4>Workspace Type</h4>
+          <div class="workspace-type-select">
+            <div class="workspace-option selected" data-type="guided" id="ws-guided">
+              <i class="fas fa-map"></i><h5>Guided Template</h5><p>Pre-structured sections to keep you organized</p>
+            </div>
+            <div class="workspace-option" data-type="blank" id="ws-blank">
+              <i class="fas fa-square"></i><h5>Blank Canvas</h5><p>Start clean — add your own sections</p>
+            </div>
+          </div>
+        </div>
+        <div class="setup-step" id="setup-step-3" style="display:none">
+          <h4>Color Scheme</h4>
+          <div id="np-palette-builder" class="palette-builder">
+            <div class="palette-dot-input" style="background:#F9D5D3" data-index="0"></div>
+            <div class="palette-dot-input" style="background:#F2B4C0" data-index="1"></div>
+            <div class="palette-dot-input" style="background:#CFA18D" data-index="2"></div>
+            <div class="palette-dot-input" style="background:#B8936A" data-index="3"></div>
+            <div class="palette-dot-input" style="background:#7A6055" data-index="4"></div>
+          </div>
+        </div>
+      </div>
+      <div class="setup-nav">
+        <button class="btn-secondary" id="setup-prev-btn" style="display:none"><i class="fas fa-arrow-left"></i> Back</button>
+        <button class="btn-primary" id="setup-next-btn">Next <i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- New Inspiration Folder Modal -->
+<div id="modal-new-inspo-folder" class="modal-overlay" style="display:none">
+  <div class="modal-box modal-sm">
+    <div class="modal-header"><h3>New Inspiration Folder</h3><button class="modal-close-btn" onclick="closeModal('modal-new-inspo-folder')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <label class="form-label">Folder Name<input type="text" id="inspo-folder-name" class="input-field" placeholder="e.g. Vintage Florals" /></label>
+      <label class="form-label">Folder Color
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px" id="folder-color-picker">
+          <div class="folder-color-swatch" data-color="#F2B4C0" style="background:#F2B4C0"></div>
+          <div class="folder-color-swatch" data-color="#CFA18D" style="background:#CFA18D"></div>
+          <div class="folder-color-swatch" data-color="#B5C9A1" style="background:#B5C9A1"></div>
+          <div class="folder-color-swatch" data-color="#A8C4DC" style="background:#A8C4DC"></div>
+          <div class="folder-color-swatch" data-color="#D4A5D4" style="background:#D4A5D4"></div>
+          <div class="folder-color-swatch" data-color="#F0D890" style="background:#F0D890"></div>
+          <div class="folder-color-swatch" data-color="#7A6055" style="background:#7A6055"></div>
+          <div class="folder-color-swatch" data-color="#4A6B8A" style="background:#4A6B8A"></div>
+        </div>
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modal-new-inspo-folder')">Cancel</button>
+      <button class="btn-primary" id="save-inspo-folder-btn"><i class="fas fa-folder-plus"></i> Create Folder</button>
+    </div>
+  </div>
+</div>
+
+<!-- Theme Modal -->
+<div id="modal-theme" class="modal-overlay" style="display:none">
+  <div class="modal-box modal-sm">
+    <div class="modal-header"><h3>Customize App Theme</h3><button class="modal-close-btn" onclick="closeModal('modal-theme')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <p class="form-desc">Choose a global color theme, or use your active collection's colors.</p>
+      <div id="theme-presets" class="theme-presets"></div>
+      <label class="form-label" style="margin-top:16px">Custom Accent Color<input type="color" id="custom-accent-color" class="input-color" value="#CFA18D" /></label>
+      <label class="form-label">Custom Background Color<input type="color" id="custom-bg-color" class="input-color" value="#FDF5F3" /></label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modal-theme')">Cancel</button>
+      <button class="btn-primary" id="apply-theme-btn"><i class="fas fa-palette"></i> Apply Theme</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add AI Program Modal -->
+<div id="modal-add-ai" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <div class="modal-header"><h3><i class="fas fa-robot"></i> Add AI Program</h3><button class="modal-close-btn" onclick="closeModal('modal-add-ai')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <label class="form-label">Program Name *<input type="text" id="ai-name" class="input-field" placeholder="e.g. Claude AI" /></label>
+      <label class="form-label">Description<input type="text" id="ai-desc" class="input-field" placeholder="What do you use it for?" /></label>
+      <label class="form-label">Tags (comma-separated)<input type="text" id="ai-tags" class="input-field" placeholder="Writing, Research, Images" /></label>
+      <label class="form-label">Icon (emoji)<input type="text" id="ai-icon" class="input-field" placeholder="🤖" maxlength="4" style="font-size:1.4rem;width:80px" /></label>
+      <label class="form-label">Color Theme
+        <div class="ws-color-row" id="ai-color-row" style="margin-top:6px">
+          <div class="ws-color-swatch active" data-color="#CFA18D" style="background:#CFA18D"></div>
+          <div class="ws-color-swatch" data-color="#E8647A" style="background:#E8647A"></div>
+          <div class="ws-color-swatch" data-color="#7B5EA7" style="background:#7B5EA7"></div>
+          <div class="ws-color-swatch" data-color="#2EB8B8" style="background:#2EB8B8"></div>
+          <div class="ws-color-swatch" data-color="#D4A851" style="background:#D4A851"></div>
+          <div class="ws-color-swatch" data-color="#4BA67C" style="background:#4BA67C"></div>
+          <div class="ws-color-swatch" data-color="#FF7055" style="background:#FF7055"></div>
+          <div class="ws-color-swatch" data-color="#1A2744" style="background:#1A2744"></div>
+        </div>
+      </label>
+      <div class="modal-footer-row"><button class="btn-secondary" onclick="closeModal('modal-add-ai')">Cancel</button><button class="btn-primary" id="ai-save-btn"><i class="fas fa-save"></i> Add Program</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Library Item Modal -->
+<div id="modal-add-lib" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <div class="modal-header"><h3><i class="fas fa-images"></i> Add Library Item</h3><button class="modal-close-btn" onclick="closeModal('modal-add-lib')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <label class="form-label">Title *<input type="text" id="lib-title" class="input-field" placeholder="e.g. Rose Gold Foil Figure" /></label>
+      <label class="form-label">Type
+        <select id="lib-type" class="input-field">
+          <option value="image">Image</option><option value="worksheet">Worksheet</option><option value="prompt">Prompt</option><option value="foil">Foil Layer</option><option value="pattern">Pattern</option><option value="template">Template</option>
+        </select>
+      </label>
+      <label class="form-label">AI Source
+        <select id="lib-source" class="input-field">
+          <option>Midjourney</option><option>Adobe Firefly</option><option>ChatGPT</option><option>Microsoft Copilot</option><option>Canva AI</option><option>Google Gemini</option><option>DeepSeek</option><option>Manual</option>
+        </select>
+      </label>
+      <label class="form-label">File Type<input type="text" id="lib-filetype" class="input-field" placeholder="PNG, SVG, PDF..." /></label>
+      <label class="form-label">Tags<input type="text" id="lib-tags" class="input-field" placeholder="foiling, floral, rose gold" /></label>
+      <label class="form-label">Notes<input type="text" id="lib-notes" class="input-field" placeholder="Brief description..." /></label>
+      <div class="modal-footer-row"><button class="btn-secondary" onclick="closeModal('modal-add-lib')">Cancel</button><button class="btn-primary" id="lib-save-btn"><i class="fas fa-save"></i> Add to Library</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Binder Modal -->
+<div id="modal-add-binder" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <div class="modal-header"><h3><i class="fas fa-book-open"></i> New Skill Binder</h3><button class="modal-close-btn" onclick="closeModal('modal-add-binder')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <label class="form-label">Binder Title *<input type="text" id="binder-title" class="input-field" placeholder="e.g. Foiling Techniques" /></label>
+      <label class="form-label">Subject / Skill<input type="text" id="binder-subject" class="input-field" placeholder="e.g. Foiling, App Dev, Paper Crafting" /></label>
+      <label class="form-label">Color Theme
+        <div class="ws-color-row" id="binder-color-row" style="margin-top:6px">
+          <div class="ws-color-swatch active" data-color="#CFA18D" style="background:#CFA18D"></div>
+          <div class="ws-color-swatch" data-color="#E8647A" style="background:#E8647A"></div>
+          <div class="ws-color-swatch" data-color="#7B5EA7" style="background:#7B5EA7"></div>
+          <div class="ws-color-swatch" data-color="#2EB8B8" style="background:#2EB8B8"></div>
+          <div class="ws-color-swatch" data-color="#D4A851" style="background:#D4A851"></div>
+          <div class="ws-color-swatch" data-color="#4BA67C" style="background:#4BA67C"></div>
+          <div class="ws-color-swatch" data-color="#FF7055" style="background:#FF7055"></div>
+          <div class="ws-color-swatch" data-color="#1A2744" style="background:#1A2744"></div>
+        </div>
+      </label>
+      <div class="modal-footer-row"><button class="btn-secondary" onclick="closeModal('modal-add-binder')">Cancel</button><button class="btn-primary" id="binder-save-btn"><i class="fas fa-save"></i> Create Binder</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Notebook Modal -->
+<div id="modal-add-notebook" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <div class="modal-header"><h3><i class="fas fa-book"></i> Add Container</h3><button class="modal-close-btn" onclick="closeModal('modal-add-notebook')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <label class="form-label">Name *<input type="text" id="nb-name" class="input-field" placeholder="e.g. Spring Sketchbook" /></label>
+      <label class="form-label">Type
+        <select id="nb-type" class="input-field">
+          <option value="folder">Folder</option><option value="spiral">Spiral Notebook</option><option value="sketchbook">Sketchbook</option><option value="scrapbook">12×12 Scrapbook Pad</option>
+        </select>
+      </label>
+      <label class="form-label">Color
+        <div class="ws-color-row" id="nb-color-row" style="margin-top:6px">
+          <div class="ws-color-swatch active" data-color="#CFA18D" style="background:#CFA18D"></div>
+          <div class="ws-color-swatch" data-color="#F2B4C0" style="background:#F2B4C0"></div>
+          <div class="ws-color-swatch" data-color="#7B5EA7" style="background:#7B5EA7"></div>
+          <div class="ws-color-swatch" data-color="#2EB8B8" style="background:#2EB8B8"></div>
+          <div class="ws-color-swatch" data-color="#D4A851" style="background:#D4A851"></div>
+          <div class="ws-color-swatch" data-color="#4BA67C" style="background:#4BA67C"></div>
+          <div class="ws-color-swatch" data-color="#FF7055" style="background:#FF7055"></div>
+          <div class="ws-color-swatch" data-color="#1A2744" style="background:#1A2744"></div>
+        </div>
+      </label>
+      <div class="modal-footer-row"><button class="btn-secondary" onclick="closeModal('modal-add-notebook')">Cancel</button><button class="btn-primary" id="nb-save-btn"><i class="fas fa-save"></i> Add Container</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/collections.js"></script>
+<script src="js/inspiration.js"></script>
+<script src="js/projects.js"></script>
+<script src="js/studio.js"></script>
+<script src="js/unzip3d.js"></script>
+<script src="js/foil.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/genstudio.js"></script>
+</body>
+</html>

@@ -1,0 +1,442 @@
+### 🏠 Studio Dashboard
+- Welcome banner with today's date
+- Quick Action buttons for every major section
+- Live stats (library items, prompts, worksheets, notebooks)
+- Recently added items grid
+
+### 🤖 AI Program Dashboards
+- Visual dashboard cards for each AI tool
+- Storage sections: Documents, Images, Prompts, Notes, Exports, Templates, Foil Layers
+- Color-coded themes per program
+- Slide-over detail panel with quick actions
+- Add new programs with name, description, tags, color theme
+- Delete in Edit Mode
+
+### 🖼️ Visual Library
+- Gallery-style grid with big visual cards
+- Filter by type: All, Images, Worksheets, Prompts, Foil Layers, Patterns, Templates
+- Real-time search
+- File type badges (PNG, SVG, PDF, JPG, EPS)
+- AI source tracking
+- Add/delete items
+
+### 📚 Skill Binders with Dividers
+- Custom binder covers with color themes and fashion-illustration style
+- Tabbed divider system (editable, add/delete tabs)
+- Page management (add/delete pages)
+- Page types: Worksheet, Tutorial, Notes, Prompt, Technique, Reference
+- Multiple binders selectable from spine shelf
+
+### 📓 Notebooks & Folders
+- Container types: Folders, Spiral Notebooks, Sketchbooks, 12×12 Scrapbook Pads
+- Visual container cards with distinctive cover designs
+- Spiral notebook visual with binding rings
+- Filter by container type
+- Add/delete containers
+
+### 📄 Worksheet Generator
+- Page sizes: 8.5×11, 5×7, 7×8, 12×12
+- Branded header with logo and LCS name
+- Editable title, AI source, tags, file types
+- Color theme selector (7 brand colors)
+- Live preview as you type
+- Save to library
+- Print / Save PDF
+
+### ✨ Prompt Helper
+- Free-form natural language input ("brain dump mode")
+- 5 prompt variants: Short, Medium, Detailed, Creative, Technical
+- **SAM Mode** — keeps prompts bold, visual, and aesthetically aligned
+- AI target selector (General, Image, Writing, Coding, Design)
+- Copy to clipboard
+- Save prompts to library
+- Load saved prompts back for reuse
+- Saved prompts gallery with titles and previews
+
+### 🎨 Brand Kit
+- Full color palette with hex codes
+- Typography showcase (Playfair Display + DM Sans)
+- Logo concept variations
+
+### 🛠️ Universal Edit Mode
+- Toggle edit mode from any page
+- Delete buttons appear on all items
+- Confirmation dialogs before deleting
+- Non-destructive workflow
+
+### 💾 Data Persistence
+- All data saved to `localStorage` — works completely offline
+- Default sample data pre-loaded for immediate use
+- Data survives page refreshes and browser restarts
+
+### 📱 PWA / Offline Support
+- Service Worker for offline caching
+- Web App Manifest for installability
+- Works on phones and tablets
+- Print stylesheet for worksheets
+
+---
+
+## 🗂️ App Structure
+
+```
+index.html              Main application shell + all pages
+css/
+  style.css             Complete design system
+  print.css             Print stylesheet for worksheets
+js/
+  data.js               LocalStorage data layer + seed data
+  app.js                All app logic, rendering, interactions
+icons/
+  icon-192.svg          App icon
+manifest.json           PWA manifest
+sw.js                   Service Worker (offline caching)
+```
+
+---
+
+## 🔗 Entry Points
+
+| Path | Description |
+|------|-------------|
+| `/` or `/index.html` | Main app — Studio Dashboard |
+| `/?page=visual-library` | Opens Visual Library |
+| `/?page=prompt-helper` | Opens Prompt Helper |
+| `/?page=worksheet` | Opens Worksheet Generator |
+
+---
+
+## 🎨 Brand Colors
+
+| Name | Hex |
+|------|-----|
+| Studio Rose (primary) | `#E8647A` |
+| Creative Violet | `#7B5EA7` |
+| Studio Teal | `#2EB8B8` |
+| LCS Gold | `#D4A851` |
+| Warm Coral | `#FF7055` |
+| Studio Black | `#111111` |
+| Forest Green | `#4BA67C` |
+
+---
+
+## 💡 Features Not Yet Implemented
+
+- Drag-and-drop item reordering
+- Actual file upload/attachment support
+- Cloud sync (cross-device)
+- AI generation integration (requires internet + API key)
+- Prompt Learning Track (bite-sized lessons)
+- Export to PDF (currently print-based)
+- Seasonal themes switcher
+- Image preview viewer modal
+- Pattern preview (12×12 full view)
+- Real handwriting/drawing canvas in notebooks
+- Search across all sections (global search)
+
+---
+
+## 🚀 Recommended Next Steps
+
+1. **Add drag-and-drop** for items in the library and binders
+2. **Expand prompt templates** with more SAM Mode patterns
+3. **Build the notebook canvas** — lined/grid/blank pages with actual writing
+4. **Add global search** across all data
+5. **Build the 12×12 pattern preview** with colorway switching
+6. **Create a seasonal themes system** (spring/summer/autumn/winter)
+7. **Add image upload** to library cards (base64 or File API)
+8. **Export binder as PDF** (using browser print + styled pages)
+
+---
+
+## 📋 Data Model
+
+All data stored in `localStorage` under key `lcs_data_v1`:
+
+```json
+{
+  "aiPrograms": [...],      // AI tool dashboards
+  "libraryItems": [...],    // Visual library gallery items
+  "binders": [...],         // Skill binders with tabs + pages
+  "containers": [...],      // Notebooks, folders, sketchbooks, scrapbooks
+  "savedPrompts": [...],    // Prompt helper saved prompts
+  "worksheets": [...],      // Saved worksheets
+  "settings": {}            // User preferences (SAM Mode, etc.)
+}
+```
+Your Lundy Creative Studios app is built and ready! 🌸 Here's everything that's in it:
+
+What I built for you
+A complete offline-first creative studio app with 7 major sections:
+🏠 Studio Dashboard
+Your home base — welcome banner, quick actions, live stats, and a "Recently Added" gallery showing your latest work.
+🤖 AI Program Dashboards
+6 pre-loaded AI tools (Copilot, Firefly, ChatGPT, Midjourney, Canva AI, Gemini) — each with its own color-coded card, storage sections, and a slide-over detail panel. Add as many more as you want.
+🖼️ Visual Library
+A big bold gallery with filters by type (Images, Worksheets, Prompts, Foil Layers, Patterns, Templates) and live search. 8 sample items pre-loaded.
+📚 Skill Binders with Dividers
+5 pre-made binders (Foiling, App Development, Paper Crafting, Prompt Writing, Digital Design). Each has color-coded tabbed dividers, page management, and a printable layout.
+📓 Notebooks & Folders
+8 sample containers: Folders, Spiral Notebooks (with ring binding visuals!), Sketchbooks, and 12×12 Scrapbook Pads. Filter by type.
+📄 Worksheet Generator
+Choose page size (8.5×11, 5×7, 7×8, 12×12), enter a title + AI source + tags + file types, pick a brand color, paste your content — live preview updates as you type. Save to library or print as PDF.
+✨ Prompt Helper with SAM Mode
+Type out your long messy thoughts → get 5 versions back: Short, Medium, Detailed, Creative, Technical. SAM Mode keeps everything bold, visual, and aesthetically yours. Save and reload prompts anytime.
+✏️ Universal Edit Mode
+Click "Edit Layout" on any page — delete buttons appear on everything. Nothing gets deleted without your confirmation.
+💾 Fully Offline
+All your data lives in your browser's localStorage. Works with no internet. Service worker caches the app for offline install.
+List of Ai apps I have 
+
+Ask Anything
+• Ask Gemini
+• Ask Copilot
+• Chat
+• DeepAI Chat
+• DeepSeek
+• NotebookLM
+• Gemini
+• M365 Copilot
+• Genspark
+• Skywork
+• Wispr Flow
+Notion (AI features built in)
+• Milanote (AI‑assisted creative organization)
+• Manus (AI writing / creative tool)
+• Firebase Studio (AI‑augmented dev tooling)
+1	/**
+     2	 * LUNDY CREATIVE STUDIOS — Data Layer
+     3	 * All data is stored in localStorage for offline-first operation.
+     4	 */
+     5	
+     6	const DB_KEY = 'lcs_data_v1';
+     7	
+     8	// ---- Default seed data ----
+     9	const DEFAULT_DATA = {
+    10	  aiPrograms: [
+    11	    {
+    12	      id: 'ai_001',
+    13	      name: 'Microsoft Copilot',
+    14	      desc: 'Writing, research, and creative brainstorming',
+    15	      tags: ['Writing', 'Research', 'Brainstorming'],
+    16	      color: '#1A2744',
+    17	      icon: '🤖',
+    18	      counts: { documents: 12, images: 3, prompts: 8, notes: 5 },
+    19	      created: new Date('2024-10-15').toISOString()
+    20	    },
+    21	    {
+    22	      id: 'ai_002',
+    23	      name: 'Adobe Firefly',
+    24	      desc: 'Image generation and creative effects',
+    25	      tags: ['Images', 'Design', 'Foiling'],
+    26	      color: '#E8647A',
+    27	      icon: '🔥',
+    28	      counts: { documents: 4, images: 28, prompts: 15, notes: 2 },
+    29	      created: new Date('2024-09-20').toISOString()
+    30	    },
+    31	    {
+    32	      id: 'ai_003',
+    33	      name: 'ChatGPT',
+    34	      desc: 'All-purpose writing, coding, and ideation',
+    35	      tags: ['Writing', 'Coding', 'Worksheets', 'Ideas'],
+    36	      color: '#4BA67C',
+    37	      icon: '💬',
+    38	      counts: { documents: 18, images: 0, prompts: 22, notes: 11 },
+    39	      created: new Date('2024-08-05').toISOString()
+    40	    },
+    41	    {
+    42	      id: 'ai_004',
+    43	      name: 'Midjourney',
+    44	      desc: 'Fashion illustrations and artistic imagery',
+    45	      tags: ['Images', 'Illustration', 'Fashion', 'Art'],
+    46	      color: '#7B5EA7',
+    47	      icon: '🎨',
+    48	      counts: { documents: 2, images: 47, prompts: 30, notes: 8 },
+    49	      created: new Date('2024-07-12').toISOString()
+    50	    },
+    51	    {
+    52	      id: 'ai_005',
+    53	      name: 'Canva AI',
+    54	      desc: 'Graphic design and template creation',
+    55	      tags: ['Design', 'Templates', 'Graphics', 'Branding'],
+    56	      color: '#FF7055',
+    57	      icon: '🖌️',
+    58	      counts: { documents: 9, images: 14, prompts: 6, notes: 3 },
+    59	      created: new Date('2024-11-01').toISOString()
+    60	    },
+    61	    {
+    62	      id: 'ai_006',
+    63	      name: 'Google Gemini',
+    64	      desc: 'Research, planning, and app development help',
+    65	      tags: ['Research', 'Coding', 'Planning'],
+    66	      color: '#2EB8B8',
+    67	      icon: '💎',
+    68	      counts: { documents: 7, images: 1, prompts: 11, notes: 6 },
+    69	      created: new Date('2024-12-01').toISOString()
+    70	    }
+    71	  ],
+    72	
+    73	  libraryItems: [
+    74	    {
+    75	      id: 'item_001',
+    76	      title: 'Rose Gold Foil Fashion Figure',
+    77	      type: 'image',
+    78	      source: 'Midjourney',
+    79	      notes: 'Used for paper pad cover design',
+    80	      tags: ['foiling', 'fashion', 'rose gold'],
+   {
+      id: 'ai_006',
+      name: 'Google Gemini',
+      desc: 'Research, planning, and app development help',
+      tags: ['Research', 'Coding', 'Planning'],
+      color: '#2EB8B8',
+      icon: '💎',
+      counts: { documents: 7, images: 1, prompts: 11, notes: 6 },
+      created: new Date('2024-12-01').toISOString()
+    },
+    {
+      id: 'ai_007',
+      name: 'Ask Anything',
+      desc: 'Quick question and answer AI assistant',
+      tags: ['Q&A', 'Research', 'Quick Answers'],
+      color: '#5B8DEF',
+      icon: '❓',
+      counts: { documents: 0, images: 0, prompts: 0, notes: 0 },
+      created: new Date('2025-01-01').toISOString()
+    },
+    {
+      id: 'ai_008',
+      name: 'DeepAI Chat',
+      desc: 'AI chat for creative ideas and content generation',
+      tags: ['Writing', 'Ideas', 'Chat', 'Creative'],
+      color: '#E8647A',
+      icon: '🌊',
+      counts: { documents: 0, images: 0, prompts: 0, notes: 0 },
+      created: new Date('2025-01-01').toISOString()
+    },
+    {
+      id: 'ai_009',
+      name: 'DeepSeek',
+      desc: 'Advanced AI for research, reasoning, and coding',
+      tags: ['Research', 'Coding', 'Reasoning', 'Analysis'],
+      color: '#4A90D9',
+      icon: '🔭',
+      counts: { documents: 0, images: 0, prompts: 0, notes: 0 },
+      created: new Date('2025-01-01').toISOString()
+    },
+    {
+      id: 'ai_010',
+      name: 'NotebookLM',
+      desc: 'Google AI for summarizing and organizing your documents',
+      tags: ['Research', 'Summarizing', 'Documents', 'Notes'],
+      color: '#4BA67C',
+      icon: '📒',
+      counts: { documents: 0, images: 0, prompts: 0, notes: 0 },
+      created: new Date('2025-01-01').toISOString()
+    },
+    {
+      id: 'ai_011',
+      name: 'M365 Copilot',
+      desc: 'Microsoft AI built into Word, Excel, PowerPoint, and Outlook',
+      tags: ['Documents', 'Spreadsheets', 'Presentations', 'Office'],
+      color: '#1A2744',
+      icon: '💼',
+      counts: { documents: 0, images: 0, prompts: 0, notes: 0 },
+      created: new Date('2025-01-01').toISOString()
+    },
+    {
+      id: 'ai_012',
+      name: 'Genspark',
+      desc: 'AI-powered research and content creation platform',
+      tags: ['Research', 'Content', 'Writing', 'Ideas'],
+      color: '#FF7055',
+      icon: '⚡',
+      counts: { documents: 0, images: 0, prompts: 0, notes: 0 },
+      created: new Date('2025-01-01').toISOString()
+    },
+    {
+      id: 'ai_013',
+      name: 'Skywork',
+      desc: 'AI assistant for professional and creative tasks',
+      tags: ['Writing', 'Professional', 'Creative', 'Tasks'],
+      color: '#7B5EA7',
+      icon: '🌤️',
+      counts: { documents: 0, images: 0, prompts: 0, notes: 0 },
+      created: new Date('2025-01-01').toISOString()
+    },
+    {
+      id: 'ai_014',
+      name: 'Wispr Flow',
+      desc: 'AI-powered voice-to-text for hands-free dictation',
+      tags: ['Voice', 'Dictation', 'Writing', 'Accessibility'],
+      color: '#2EB8B8',
+      icon: '🎙️',
+      counts: { documents: 0, images: 0, prompts: 0, notes: 0 },
+      created: new Date('2025-01-01').toISOString()
+    },
+    {
+      id: 'ai_015',
+      name: 'Notion AI',
+      desc: 'AI features built into Notion — writing, summarizing, organizing',
+      tags: ['Organization', 'Writing', 'Notes', 'Planning', 'Databases'],
+      color: '#000000',
+      icon: '📋',
+      counts: { documents: 0, images: 0, prompts: 0, notes: 0 },
+      created: new Date('2025-01-10').toISOString()
+    },
+    {
+      id: 'ai_016',
+      name: 'Milanote',
+      desc: 'AI-assisted creative organization and visual moodboards',
+      tags: ['Moodboards', 'Creative', 'Organization', 'Visual', 'Planning'],
+      color: '#F5A623',
+      icon: '🗃️',
+      counts: { documents: 0, images: 0, prompts: 0, notes: 0 },
+      created: new Date('2025-01-10').toISOString()
+    },
+    {
+      id: 'ai_017',
+      name: 'Manus',
+      desc: 'AI writing and creative tool for long-form content',
+      tags: ['Writing', 'Creative', 'Long-form', 'Content', 'Storytelling'],
+      color: '#9B59B6',
+      icon: '✍️',
+      counts: { documents: 0, images: 0, prompts: 0, notes: 0 },
+      created: new Date('2025-01-10').toISOString()
+    },
+    {
+      id: 'ai_018',
+      name: 'Firebase Studio',
+      desc: 'AI-augmented dev tooling for building and deploying apps',
+      tags: ['Coding', 'App Development', 'Firebase', 'Backend', 'Deploy'],
+      color: '#FFA000',
+      icon: '🔧',
+      counts: { documents: 0, images: 0, prompts: 0, notes: 0 },
+      created: new Date('2025-01-10').toISOString()
+    }
+  ],
+All 18 AI programs are in there. Here's a complete rundown of every tool now on your dashboard:
+
+Your AI Programs Dashboard — All 18 Tools 🤖
+Original 6:
+	•	🤖 Microsoft Copilot
+	•	🔥 Adobe Firefly
+	•	💬 ChatGPT
+	•	🎨 Midjourney
+	•	🖌️ Canva AI
+	•	💎 Google Gemini
+From your first list:
+	•	❓ Ask Anything
+	•	🌊 DeepAI Chat
+	•	🔭 DeepSeek
+	•	📒 NotebookLM
+	•	💼 M365 Copilot
+	•	⚡ Genspark
+	•	🌤️ Skywork
+	•	🎙️ Wispr Flow
+Just added (your latest 4):
+	•	📋 Notion AI — Writing, summarizing, and organizing with AI built right in
+	•	🗃️ Milanote — AI-assisted visual moodboards and creative organization
+	•	✍️ Manus — AI writing and creative tool for long-form content
+	•	🔧 Firebase Studio — AI-augmented dev tooling for building and deploying apps
+Each one has its own color-coded card, storage sections (Documents, Images, Prompts, Notes, Exports, Templates), and a slide-out detail panel. And since the Worksheet Generator's AI Source dropdown is now grouped and updated too, you can track exactly which tool any worksheet came from. 
